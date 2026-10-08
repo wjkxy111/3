@@ -1,0 +1,23 @@
+{
+  "project": "ra8d1_secure_bootloader",
+  "target": "R7FA8D1BHECBD",
+  "fsp": "6.4.0",
+  "toolchain": "LLVM 21.1.1",
+  "security": {
+    "algorithm": "ECDSA-P256-SHA256",
+    "signature_format": "raw-rs-64-byte",
+    "hardware_engine": "RSIP-E51A",
+    "key_id": 1,
+    "anti_rollback": "FSP anti-rollback counter plus dual metadata journal"
+  },
+  "flash": {
+    "bootloader_start": "0x02000000",
+    "bootloader_size": "0x00010000",
+    "secure_slot_start": "0x02010000",
+    "secure_slot_size": "0x001E8000",
+    "application_start": "0x02010100",
+    "metadata_start": "0x27000000",
+    "metadata_size": "0x00000400"
+  },
+  "status": "template-boundary-only-until-fsp-project-and-hardware-test"
+}

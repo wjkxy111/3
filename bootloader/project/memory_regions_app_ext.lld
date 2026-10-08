@@ -1,0 +1,10 @@
+/* Include this file before the generated FSP linker script for the signed
+ * RA8D1 application project. Header occupies the first 256 bytes of slot. */
+RAM_START = 0x22000000;
+RAM_LENGTH = 0x000E0000;
+FLASH_START = 0x02010100;
+FLASH_LENGTH = 0x001E7F00;
+DATA_FLASH_START = 0x27000400;
+DATA_FLASH_LENGTH = 0x00002C00;
+SDRAM_START = 0x68000000;
+SDRAM_LENGTH = 0x08000000;
