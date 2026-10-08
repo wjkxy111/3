@@ -1,6 +1,7 @@
 #include "can_anomaly.h"
 
 #include <limits.h>
+#include <math.h>
 #include <string.h>
 
 #define CAN_AI_SCORE_MAX                 (1000U)
@@ -420,8 +421,10 @@ void can_ai_init(can_ai_detector_t * detector, const can_ai_config_t * config)
     }
 
     can_ai_default_config(&defaults);
+    /* Copy before clearing: config may point to detector->config. */
+    can_ai_config_t selected = (NULL == config) ? defaults : *config;
     memset(detector, 0, sizeof(*detector));
-    detector->config = (NULL == config) ? defaults : *config;
+    detector->config = selected;
 
     if (0U == detector->config.min_period_samples)
     {
@@ -431,29 +434,31 @@ void can_ai_init(can_ai_detector_t * detector, const can_ai_config_t * config)
     {
         detector->config.min_payload_samples = defaults.min_payload_samples;
     }
-    if (detector->config.period_sigma <= 0.0F)
+    if (!isfinite(detector->config.period_sigma) || (detector->config.period_sigma <= 0.0F))
     {
         detector->config.period_sigma = defaults.period_sigma;
     }
-    if ((detector->config.period_jitter_floor_ratio < 0.0F) ||
+    if (!isfinite(detector->config.period_jitter_floor_ratio) ||
+        (detector->config.period_jitter_floor_ratio < 0.0F) ||
         (detector->config.period_jitter_floor_ratio >= 1.0F))
     {
         detector->config.period_jitter_floor_ratio = defaults.period_jitter_floor_ratio;
     }
-    if ((detector->config.period_fast_ratio <= 0.0F) ||
+    if (!isfinite(detector->config.period_fast_ratio) ||
+        (detector->config.period_fast_ratio <= 0.0F) ||
         (detector->config.period_fast_ratio >= 1.0F))
     {
         detector->config.period_fast_ratio = defaults.period_fast_ratio;
     }
-    if (detector->config.period_slow_ratio <= 1.0F)
+    if (!isfinite(detector->config.period_slow_ratio) || (detector->config.period_slow_ratio <= 1.0F))
     {
         detector->config.period_slow_ratio = defaults.period_slow_ratio;
     }
-    if (detector->config.payload_sigma <= 0.0F)
+    if (!isfinite(detector->config.payload_sigma) || (detector->config.payload_sigma <= 0.0F))
     {
         detector->config.payload_sigma = defaults.payload_sigma;
     }
-    if (detector->config.payload_sigma_floor < 0.0F)
+    if (!isfinite(detector->config.payload_sigma_floor) || (detector->config.payload_sigma_floor < 0.0F))
     {
         detector->config.payload_sigma_floor = defaults.payload_sigma_floor;
     }
@@ -461,7 +466,7 @@ void can_ai_init(can_ai_detector_t * detector, const can_ai_config_t * config)
     {
         detector->config.rate_window_us = defaults.rate_window_us;
     }
-    if (detector->config.flood_multiplier <= 1.0F)
+    if (!isfinite(detector->config.flood_multiplier) || (detector->config.flood_multiplier <= 1.0F))
     {
         detector->config.flood_multiplier = defaults.flood_multiplier;
     }

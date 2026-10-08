@@ -176,7 +176,9 @@ typedef struct st_can_ai_detector
 /** Fill a configuration with conservative defaults for a periodic industrial bus. */
 void can_ai_default_config(can_ai_config_t * config);
 
-/** Initialize the detector and enter a fresh learning phase. */
+/** Initialize and enter learning. Non-finite float settings fall back to defaults;
+ * config may safely point to detector->config when resetting with existing settings.
+ */
 void can_ai_init(can_ai_detector_t * detector, const can_ai_config_t * config);
 
 /** Erase all profiles/statistics and start a new learning phase. */

@@ -1,5 +1,16 @@
 # RA8D1 CAN-FD 端侧异常检测
 
+## 板端可靠性更新（2026-10-09）
+
+检测配置中的 NaN、正负无穷会回退到默认值，避免周期、Payload 或洪泛检测
+因非有限参数失效。重新初始化时可以安全传入 `&detector.config`，原有有效参数
+会保留，学习画像与统计计数仍会清空。
+
+运行 `python tools/run_ai_tests.py` 可用 GCC 检查非有限参数、自配置重置、正常学习、
+周期过快、Payload 突变、未知 ID 和非法 ID。支持 `--cc <编译器路径>`。
+本次还通过既有 AUTOSAR/Bootloader 主机测试及 Cortex-M85 编译检查；固件源码需要
+在 e² studio 重新构建并下载后才会在开发板生效，本次未进行实板烧录。
+
 > 显示硬件说明：当前 H0233S001 是 222×480 的非触摸屏；工程使用 256 像素
 > 帧缓冲跨度满足 GLCDC 对齐。触摸能力、预留管脚和替换条件见
 > [docs/DISPLAY_TOUCH.md](docs/DISPLAY_TOUCH.md)。
